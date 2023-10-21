@@ -51,15 +51,6 @@ object Recursion {
     sumTailrec(a, 0)
   }
 
-  // 3. is isPrime function tail recursive or not? yes, it is but let's rephrase in order to make it more visibile
-  def isPrime(n: Int): Boolean = {
-    def isPrimeUntil(t: Int): Boolean =
-      if (t <= 1) true
-      else if (n % t == 0) false
-      else isPrimeUntil(t - 1)
-
-    isPrimeUntil(n / 2)
-  }
 
   /**
    * EXERCISES
@@ -80,12 +71,24 @@ object Recursion {
 
   //2. fibonacci function, tail recursive
   def fibonacci(n: Int): Int = {
+    @tailrec
     def fiboTailrec(i: Int, last: Int, previous: Int): Int =
       if (i >= n) last
       else fiboTailrec(i + 1, last + previous, last)
 
     if (n <= 2) 1
     else fiboTailrec(2, 1, 1)
+  }
+
+  // 3. is isPrime function tail recursive or not? yes, it is but let's rephrase in order to make it more visibile
+  def isPrime(n: Int): Boolean = {
+   @tailrec
+    def isPrimeUntil(t: Int): Boolean =
+      if (t <= 1) true
+      else if (n % t == 0) false
+      else isPrimeUntil(t - 1)
+
+    isPrimeUntil(n / 2)
   }
 
   def main(args: Array[String]): Unit = {
