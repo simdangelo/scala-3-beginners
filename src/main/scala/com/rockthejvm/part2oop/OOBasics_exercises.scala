@@ -83,7 +83,3 @@ object OOBasics_exercises {
   }
 }
 
-def main(args: Array[String]): Unit = {
-  println("ciao")
-}
-
