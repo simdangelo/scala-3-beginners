@@ -20,15 +20,17 @@ object Generics {
   val adding = firstNumber + 3
 
 
-  // multiple generic types
+  // MULTIPLE GENERIC TYPES
   trait MyMap[K, V]
 
+
+  // GENERIC METHODS
   object MyList {
     def from2Elements[A](elem1: A, elem2: A): MyList[A] =
       new NonEmpty[A](elem1, new NonEmpty[A](elem2, new Empty[A]))
   }
 
-  // calling methods
+  // invoking generi method
   val first2Numbers = MyList.from2Elements[Int](1,2)
   val first2Numbers_v2 = MyList.from2Elements(1, 2)
   val first2Numbers_v3 = new NonEmpty(1, new NonEmpty(2, new Empty))
