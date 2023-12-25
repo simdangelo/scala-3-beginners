@@ -17,20 +17,20 @@ abstract class LListGenerics[A] {
   def flatMap[B](transformer: Transformer[A, LListGenerics[B]]): LListGenerics[B]
 }
 
-class EmptyGenerics[A] extends LListGenerics[A] {
+case class EmptyGenerics[A]() extends LListGenerics[A] {
   override def head: A = throw new NoSuchElementException
   override def tail: LListGenerics[A] = throw new NoSuchElementException
   override def isEmpty: Boolean = true
   override def toString = "[]"
 
-  override def map[B](transformer: Transformer[A, B]): LListGenerics[B] = new EmptyGenerics[B]
+  override def map[B](transformer: Transformer[A, B]): LListGenerics[B] = EmptyGenerics()
   override def filter(predicate: Predicate[A]): LListGenerics[A] = this
   override infix def ++(anotherList: LListGenerics[A]): LListGenerics[A] = anotherList
-  override def flatMap[B](transformer: Transformer[A, LListGenerics[B]]): LListGenerics[B] = new EmptyGenerics[B]
+  override def flatMap[B](transformer: Transformer[A, LListGenerics[B]]): LListGenerics[B] = EmptyGenerics()
 
 }
 
-class ConsGenerics[A](override val head: A, override val tail: LListGenerics[A]) extends LListGenerics[A] {
+case class ConsGenerics[A](override val head: A, override val tail: LListGenerics[A]) extends LListGenerics[A] {
   override def isEmpty: Boolean = false
   override def toString: String = {
     @tailrec
@@ -42,7 +42,7 @@ class ConsGenerics[A](override val head: A, override val tail: LListGenerics[A])
   }
 
   override def map[B](transformer: Transformer[A, B]): LListGenerics[B] = {
-    new ConsGenerics(transformer.transform(head), tail.map(transformer))
+    ConsGenerics(transformer.transform(head), tail.map(transformer))
   }
   /*
   breaking down this map function with this example [1,2,3].map(n*2)
@@ -54,11 +54,11 @@ class ConsGenerics[A](override val head: A, override val tail: LListGenerics[A])
    */
 
   override def filter(predicate: Predicate[A]): LListGenerics[A] =
-    if (predicate.test(head)) new ConsGenerics(head, tail.filter(predicate))
+    if (predicate.test(head)) ConsGenerics(head, tail.filter(predicate))
     else tail.filter(predicate)
 
   override infix def ++(anotherList: LListGenerics[A]): LListGenerics[A] =
-    new ConsGenerics(head, tail ++ anotherList)
+    ConsGenerics(head, tail ++ anotherList)
 
   override def flatMap[B](transformer: Transformer[A, LListGenerics[B]]): LListGenerics[B] =
     transformer.transform(head) ++ tail.flatMap(transformer)
@@ -108,25 +108,25 @@ class Doubler extends Transformer[Int, Int]:
 // "flatMap" function
 class DoublerList extends Transformer[Int, LListGenerics[Int]] {
   override def transform(value: Int): LListGenerics[Int] = {
-    new ConsGenerics(value, new ConsGenerics(value + 1, new EmptyGenerics))
+    ConsGenerics(value, ConsGenerics(value + 1, EmptyGenerics()))
   }
 }
 
 
 object LListTestGenerics {
   def main(args: Array[String]): Unit = {
-    val empty = new EmptyGenerics[Int]
+    val empty = EmptyGenerics[Int]()
     println(empty)
     println(empty.isEmpty)
 
-    val first3numbers = new ConsGenerics(1, new ConsGenerics(2, new ConsGenerics(3, empty)))
+    val first3numbers = ConsGenerics(1, ConsGenerics(2, ConsGenerics(3, empty)))
     println(first3numbers)
 
     val first3numbers_v2 = empty.add(1).add(2).add(3)
     println(first3numbers_v2)
     println(first3numbers_v2.isEmpty)
 
-    val someStrings = new ConsGenerics("dog", new ConsGenerics("cat", new EmptyGenerics))
+    val someStrings = ConsGenerics("dog", ConsGenerics("cat", EmptyGenerics()))
     println(someStrings)
 
 
