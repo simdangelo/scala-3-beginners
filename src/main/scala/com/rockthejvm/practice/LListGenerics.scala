@@ -112,6 +112,12 @@ class DoublerList extends Transformer[Int, LListGenerics[Int]] {
   }
 }
 
+object LListGenerics {
+  def find[A](list: LListGenerics[A], predicate: Predicate[A]): A =
+    if (list.isEmpty) throw new NoSuchElementException()
+    else if (predicate.test(list.head)) list.head
+    else find(list.tail, predicate)
+}
 
 object LListTestGenerics {
   def main(args: Array[String]): Unit = {
@@ -162,5 +168,12 @@ object LListTestGenerics {
     // flatMap TESTING
     val flattenedList = first3numbers.flatMap(new DoublerList)
     println(s"Flattened list Test: $flattenedList")
+
+    // find test
+//    println(LListGenerics.find[Int](first3numbers, evenPredicate)) // returns 2
+//    println(LListGenerics.find[Int](first3numbers, new Predicate[Int]{
+//      override def test(element: Int): Boolean = element > 5
+//    })) // throws a NSSEException
+
   }
 }
