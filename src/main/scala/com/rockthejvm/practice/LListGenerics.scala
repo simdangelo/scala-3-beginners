@@ -7,7 +7,7 @@ abstract class LListGenerics[A] {
   def head: A
   def tail: LListGenerics[A]
   def isEmpty: Boolean
-  def add(element: A): LListGenerics[A] = new ConsGenerics(element, this)
+  def add(element: A): LListGenerics[A] = ConsGenerics(element, this)
 
   // concatenation function
   infix def ++(anotherList: LListGenerics[A]): LListGenerics[A]
