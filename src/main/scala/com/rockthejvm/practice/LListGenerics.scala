@@ -156,14 +156,19 @@ object LListTestGenerics {
     // map TESTING
     //    apply map method to first3Numbers with Doubler transformer
     val numbersDoubled = first3numbers.map(doubler)
+    val numbersDoubled_v2 = first3numbers.map(x => x * 2)
+    val numbersDoubled_v3 = first3numbers.map(_ * 2)
     println(numbersDoubled)
 
     //    Now, let’s apply map method to first3Numbers with DoublerList transformer:
     val numbersNested = first3numbers.map(doublerList)
+    val numbersNested_v2 = first3numbers.map(value => ConsGenerics(value, ConsGenerics(value + 1, EmptyGenerics())))
     println(numbersNested)
 
     // filter TESTING
     val onlyEvenNumbers = first3numbers.filter(evenPredicate) // or first3numbers.map(evenPredicate) since we just instantiate an evenPredicate transform as anonymous function
+    val onlyEvenNumbers_2 = first3numbers.filter(element => element % 2 == 0)
+    val onlyEvenNumbers_3 = first3numbers.filter(_ % 2 == 0)
     println(onlyEvenNumbers)
 
     // concatenation (++) TESTING
@@ -172,10 +177,12 @@ object LListTestGenerics {
 
     // flatMap TESTING
     val flattenedList = first3numbers.flatMap(doublerList)
+    val flattenedList_v2 = first3numbers.flatMap(value => ConsGenerics(value, ConsGenerics(value + 1, EmptyGenerics())))
     println(s"Flattened list Test: $flattenedList")
 
     // find test
-//    println(LListGenerics.find[Int](first3numbers, evenPredicate)) // returns 2
+    println(LListGenerics.find[Int](first3numbers, evenPredicate)) // returns 2
+    println(LListGenerics.find[Int](first3numbers, _ % 2 == 0))
 //    println(LListGenerics.find[Int](first3numbers, new Predicate[Int]{
 //      override def test(element: Int): Boolean = element > 5
 //    })) // throws a NSSEException
