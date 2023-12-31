@@ -14,6 +14,7 @@ abstract class LListGenerics[A] {
 
   def map[B](transformer: A => B): LListGenerics[B]
   def filter(predicate: A => Boolean): LListGenerics[A]
+  def withFilter(predicate: A => Boolean): LListGenerics[A] = filter(predicate)
   def flatMap[B](transformer: A => LListGenerics[B]): LListGenerics[B]
 }
 
