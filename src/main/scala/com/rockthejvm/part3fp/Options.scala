@@ -96,9 +96,7 @@ object Options {
   val connStatus_v2 =
     config.get("host").flatMap(h =>
       config.get("port").flatMap(p =>
-        Connection(h, p).map(_.connect())
-      )
-    )
+        Connection(h, p))).map(_.connect())
 
     // for-comprehension
     val connStatus_v3 = for {
@@ -112,7 +110,7 @@ object Options {
   def main(args: Array[String]): Unit = {
 
     println(connStatus.getOrElse("Failed to establish connection."))
-    println(connStatus_v2.getOrElse("Failed to establish connection."))
+//    println(connStatus_v2.getOrElse("Failed to establish connection.")) // connStatus_v2 non ritorna un tipo Option[String] e non capisco perché
   }
 
 }
